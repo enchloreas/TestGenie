@@ -6,20 +6,20 @@ It provides seamless integration with Jira and GitHub Actions for CI/CD automati
 # Structure
 
 TestGenie/
-├── app/                 # Main application code
-│   ├── __init__.py      # Initialize app
-│   ├── models.py        # Database models (SQLAlchemy)
-│   ├── schemas.py       # Pydantic models for request validation
-│   ├── crud.py          # CRUD operations
-│   ├── main.py          # FastAPI app initialization
-├── migrations/          # For database migrations (alembic or similar)
-├── tests/               # Unit tests for your application
-│   ├── __init__.py      # Init file for tests folder
-│   ├── test_main.py     # Example test file
-├── .gitignore           # Git ignore file
-├── requirements.txt     # List of all dependencies
-├── README.md            # Project overview and documentation
-└── venv/                # Virtual environment folder
+├── app/ # Main application code
+│ ├── init.py # Initialize app
+│ ├── models.py # Database models (SQLAlchemy)
+│ ├── schemas.py # Pydantic models for request validation
+│ ├── crud.py # CRUD operations
+│ ├── main.py # FastAPI app initialization
+├── migrations/ # For database migrations (alembic or similar)
+├── tests/ # Unit tests for your application
+│ ├── init.py # Init file for tests folder
+│ ├── test_main.py # Example test file
+├── .gitignore # Git ignore file
+├── requirements.txt # List of all dependencies
+├── README.md # Project overview and documentation
+└── venv/ # Virtual environment folder
 
 # Notes for Contributors:
 - The app/ directory contains all the main logic of the application and should be treated as a Python package.
