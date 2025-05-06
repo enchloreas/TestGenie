@@ -5,7 +5,7 @@ TestGenie is a FastAPI-based backend application designed to manage, store, and 
 TestGenie helps QA engineers generate, manage, and integrate test cases from user stories and change requests.  
 It provides seamless integration with Jira and GitHub Actions for CI/CD automation.
 
-![Build Status](https://github.com/your-username/TestGenie/actions/workflows/ci.yml/badge.svg)
+![Build Status](https://github.com/enchloreas/TestGenie/actions/workflows/ci.yml/badge.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 ## Table of Contents
@@ -54,14 +54,14 @@ TestGenie/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/TestGenie.git
+   git clone https://github.com/enchloreas/TestGenie.git
    cd TestGenie
    ```
 
 2. Create and activate a virtual environment:
    ```bash
    python -m venv venv
-   venv\Scripts\activate  # On Windows
+   .\venv\Scripts\Activate.ps1  # On Windows
    ```
 
 3. Install dependencies:
