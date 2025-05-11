@@ -37,16 +37,26 @@ It provides seamless integration with Jira and GitHub Actions for CI/CD automati
 TestGenie/
 ├── app/                 # Main application code
 │   ├── __init__.py      # Initialize app
+│   ├── config.py        #
+│   ├── crud.py          # CRUD operations
+│   ├── database.py      #
+│   ├── main.py          # FastAPI app initialization  
 │   ├── models.py        # Database models (SQLAlchemy)
 │   ├── schemas.py       # Pydantic models for request validation
-│   ├── crud.py          # CRUD operations
-│   ├── main.py          # FastAPI app initialization
 ├── migrations/          # Database migrations (Alembic)
 ├── tests/               # Unit tests for the application
-│   ├── test_main.py     # Example test file
+│   ├── logs/            # Unit test reports
+│   ├── __init__.py      # initialize tests
+│   ├── test_crud.py     # crud unit tests 
+│   ├── test_database.py # database unit tests
+│   ├── test_main.py     # main unit tests
+│   ├── test_models.py   # models unit tests
+│   ├── test_schemas.py  # schemas unit tests
 ├── .gitignore           # Files and directories to ignore in Git
-├── requirements.txt     # Python dependencies
+├── init_structure.sh    # Initialize project structure
+├── LICENSE              # Project license
 ├── README.md            # Project documentation
+├── requirements.txt     # Python dependencies
 └── venv/                # Virtual environment (not committed)
 ```
 
