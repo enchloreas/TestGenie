@@ -15,10 +15,42 @@ plugins: anyio-4.9.0</pre></div><div class='section'><h3 class='domain'>TEST DAT
 </pre></div><div class='section'><h3 class='domain'>TEST SCHEMAS</h3><pre>
 <span class='pass'>tests/test_schemas.py::test_case_base_schema PASSED                      [ 77%]</span>
 <span class='pass'>tests/test_schemas.py::test_case_create_schema PASSED                    [ 88%]</span>
-<span class='pass'>tests/test_schemas.py::test_case_read_schema PASSED                      [100%]</span>
-</pre></div>======================== 9 passed, 2 warnings in 1.55s ========================</pre></div><div class='section'><h3>SUMMARY</h3><pre>
+<span class='fail'>tests/test_schemas.py::test_case_read_schema FAILED                      [100%]</span>
+</pre></div><div class='section'><h3 class='fail'>FAILURES</h3><pre>
+================================== FAILURES ===================================
+____________________________ test_case_read_schema ____________________________
+
+    def test_case_read_schema():
+        data = {
+            &quot;id&quot;: &quot;absolute&quot;,
+            &quot;name&quot;: &quot;Reset password&quot;,
+            &quot;description&quot;: &quot;Test reset password flow&quot;,
+            &quot;expected_result&quot;: &quot;User should receive reset link&quot;,
+            &quot;tags&quot;: &quot;API,critical&quot;
+        }
+    
+&gt;       schema = CaseRead(**data)
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for CaseRead
+E       id
+E         Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value=&#x27;absolute&#x27;, input_type=str]
+E           For further information visit https://errors.pydantic.dev/2.11/v/int_parsing
+
+tests\test_schemas.py:39: ValidationError
+============================== warnings summary ===============================
+venv\Lib\site-packages\pydantic\_internal\_config.py:323
+  D:\TestGenie\venv\Lib\site-packages\pydantic\_internal\_config.py:323: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
+    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
+
+venv\Lib\site-packages\pydantic\_internal\_config.py:373
+  D:\TestGenie\venv\Lib\site-packages\pydantic\_internal\_config.py:373: UserWarning: Valid config keys have changed in V2:
+  * &#x27;orm_mode&#x27; has been renamed to &#x27;from_attributes&#x27;
+    warnings.warn(message, UserWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+=================== 1 failed, 8 passed, 2 warnings in 1.33s ===================</pre></div><div class='section'><h3>SUMMARY</h3><pre>
 Total tests: 9
-<em class='pass'>Passed: 9
-</em><em class='fail'>Failed: 0
-</em>Execution time: 1.55 seconds
+<em class='pass'>Passed: 8
+</em><em class='fail'>Failed: 1
+</em>Execution time: 1.33 seconds
 </pre></div></body></html>
