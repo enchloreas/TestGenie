@@ -5,52 +5,33 @@ platform win32 -- Python 3.12.10, pytest-8.3.5, pluggy-1.5.0 -- D:\TestGenie\ven
 cachedir: .pytest_cache
 rootdir: D:\TestGenie
 plugins: anyio-4.9.0</pre></div><div class='section'><h3 class='domain'>TEST DATABASE</h3><pre>
-<span class='pass'>tests/test_database.py::test_database_connection PASSED                  [ 11%]</span>
-<span class='pass'>tests/test_database.py::test_get_db PASSED                               [ 22%]</span>
-<span class='pass'>tests/test_database.py::test_model_integration PASSED                    [ 33%]</span>
+<span class='pass'>tests/test_database.py::test_database_connection PASSED                  [  5%]</span>
+<span class='pass'>tests/test_database.py::test_get_db PASSED                               [ 10%]</span>
+<span class='pass'>tests/test_database.py::test_model_integration PASSED                    [ 15%]</span>
+</pre></div><div class='section'><h3 class='domain'>TEST DATABASE_</h3><pre>
+<span class='pass'>tests/test_database_.py::test_database_connection PASSED                 [ 20%]</span>
+<span class='pass'>tests/test_database_.py::test_get_db PASSED                              [ 25%]</span>
+<span class='pass'>tests/test_database_.py::test_model_integration PASSED                   [ 30%]</span>
 </pre></div><div class='section'><h3 class='domain'>TEST MODELS</h3><pre>
-<span class='pass'>tests/test_models.py::test_table_name PASSED                             [ 44%]</span>
-<span class='pass'>tests/test_models.py::test_class_name PASSED                             [ 55%]</span>
-<span class='pass'>tests/test_models.py::test_case_fields PASSED                            [ 66%]</span>
+<span class='pass'>tests/test_models.py::test_table_name PASSED                             [ 35%]</span>
+<span class='pass'>tests/test_models.py::test_case_fields[Test Login-Check login with valid credentials-User is logged in-UI,smoke] PASSED [ 40%]</span>
+<span class='pass'>tests/test_models.py::test_case_fields[Test Logout-Check logout functionality-User is logged out-UI,regression] PASSED [ 45%]</span>
+<span class='pass'>tests/test_models.py::test_case_id_initially_none PASSED                 [ 50%]</span>
+<span class='pass'>tests/test_models.py::test_case_id_after_commit PASSED                   [ 55%]</span>
+<span class='pass'>tests/test_models.py::test_case_field_types PASSED                       [ 60%]</span>
+</pre></div><div class='section'><h3 class='domain'>TEST MODELS_2</h3><pre>
+<span class='pass'>tests/test_models_2.py::test_table_name PASSED                           [ 65%]</span>
+<span class='pass'>tests/test_models_2.py::test_class_name PASSED                           [ 70%]</span>
+<span class='pass'>tests/test_models_2.py::test_case_fields PASSED                          [ 75%]</span>
+<span class='pass'>tests/test_models_2.py::test_case_id_field PASSED                        [ 80%]</span>
+<span class='pass'>tests/test_models_2.py::test_case_field_types PASSED                     [ 85%]</span>
 </pre></div><div class='section'><h3 class='domain'>TEST SCHEMAS</h3><pre>
-<span class='pass'>tests/test_schemas.py::test_case_base_schema PASSED                      [ 77%]</span>
-<span class='pass'>tests/test_schemas.py::test_case_create_schema PASSED                    [ 88%]</span>
-<span class='fail'>tests/test_schemas.py::test_case_read_schema FAILED                      [100%]</span>
-</pre></div><div class='section'><h3 class='fail'>FAILURES</h3><pre>
-================================== FAILURES ===================================
-____________________________ test_case_read_schema ____________________________
-
-    def test_case_read_schema():
-        data = {
-            &quot;id&quot;: &quot;absolute&quot;,
-            &quot;name&quot;: &quot;Reset password&quot;,
-            &quot;description&quot;: &quot;Test reset password flow&quot;,
-            &quot;expected_result&quot;: &quot;User should receive reset link&quot;,
-            &quot;tags&quot;: &quot;API,critical&quot;
-        }
-    
-&gt;       schema = CaseRead(**data)
-E       pydantic_core._pydantic_core.ValidationError: 1 validation error for CaseRead
-E       id
-E         Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value=&#x27;absolute&#x27;, input_type=str]
-E           For further information visit https://errors.pydantic.dev/2.11/v/int_parsing
-
-tests\test_schemas.py:39: ValidationError
-============================== warnings summary ===============================
-venv\Lib\site-packages\pydantic\_internal\_config.py:323
-  D:\TestGenie\venv\Lib\site-packages\pydantic\_internal\_config.py:323: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.11/migration/
-    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
-
-venv\Lib\site-packages\pydantic\_internal\_config.py:373
-  D:\TestGenie\venv\Lib\site-packages\pydantic\_internal\_config.py:373: UserWarning: Valid config keys have changed in V2:
-  * &#x27;orm_mode&#x27; has been renamed to &#x27;from_attributes&#x27;
-    warnings.warn(message, UserWarning)
-
--- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-=========================== short test summary info ===========================
-=================== 1 failed, 8 passed, 2 warnings in 1.33s ===================</pre></div><div class='section'><h3>SUMMARY</h3><pre>
-Total tests: 9
-<em class='pass'>Passed: 8
-</em><em class='fail'>Failed: 1
-</em>Execution time: 1.33 seconds
+<span class='pass'>tests/test_schemas.py::test_case_base_schema PASSED                      [ 90%]</span>
+<span class='pass'>tests/test_schemas.py::test_case_create_schema PASSED                    [ 95%]</span>
+<span class='pass'>tests/test_schemas.py::test_case_read_schema PASSED                      [100%]</span>
+</pre></div>======================= 20 passed, 2 warnings in 2.65s ========================</pre></div><div class='section'><h3>SUMMARY</h3><pre>
+Total tests: 20
+<em class='pass'>Passed: 20
+</em><em class='fail'>Failed: 0
+</em>Execution time: 2.65 seconds
 </pre></div></body></html>
