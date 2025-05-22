@@ -1,7 +1,7 @@
 # tests/conftest.py
 
 import pytest
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from app.config import TEST_DB_URL
 from app.database import Base
@@ -28,6 +28,13 @@ def db_session():
     """
     Fixture to provide a database session for each test.
     """
+    # Truncate all tables to ensure a clean state
+    with test_engine.connect() as connection:
+        for table in reversed(Base.metadata.sorted_tables):
+            connection.execute(text(f"DELETE FROM {table.name}"))  # Use text() for raw SQL
+        connection.commit()
+
+    # Create a new session
     db = TestingSessionLocal() # Create a new session
     
     try:
