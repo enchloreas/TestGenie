@@ -1,6 +1,6 @@
 # app/schemas.py
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 
 # Base schema for a test case
@@ -18,5 +18,4 @@ class CaseCreate(CaseBase):
 class CaseRead(CaseBase):
     id: int
 
-    class Config:
-        orm_mode = True  # Allows Pydantic to work with ORM objects
+    model_config = ConfigDict(from_attributes=True)  # Updated to use ConfigDict
