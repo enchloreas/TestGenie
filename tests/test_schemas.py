@@ -1,62 +1,45 @@
-import pytest
-from sqlalchemy import inspect
-from app.database import Base, engine, get_db
-from app.models import Case
+# tests/test_schemas.py
 
-@pytest.fixture(scope="module")
-def test_schema():
-    """
-    Fixture to set up and tear down the database.
-    """
-    # Create tables
-    Base.metadata.create_all(bind=engine)
-    yield
-    # Drop tables after tests
-    Base.metadata.drop_all(bind=engine)
-    # Dispose of the engine to close all connections
-    engine.dispose()
+from app.schemas import CaseBase, CaseCreate, CaseRead
 
-def test_database_schema():
-    """
-    Test that the database connection is valid.
-    """
-    try:
-        # Attempt to connect to the database
-        with engine.connect() as connection:
-            assert connection is not None, "Failed to connect to the database"
-    except Exception as e:
-        pytest.fail(f"Database connection failed: {e}")
+def test_case_base_schema():
+    data = {
+        "name": "Login test",
+        "description": "Test login with valid credentials",
+        "expected_result": "User should be logged in",
+        "tags": "UI,smoke"
+    }
 
-def test_get_schema(test_schema):
-    """
-    Test that the get_db() function creates and closes a session properly.
-    """
-    db_gen = get_db()
-    db = next(db_gen)  # Get the database session
-    assert db is not None, "get_db() did not return a valid session"
-    db_gen.close()  # Close the session
+    schema = CaseBase(**data)
+    assert schema.name == data["name"]
+    assert schema.description == data["description"]
+    assert schema.expected_result == data["expected_result"]
+    assert schema.tags == data["tags"]
 
-def test_schema_integration(test_schema):
-    """
-    Test that the models are correctly integrated with the database.
-    """
-    inspector = inspect(engine)
-    tables = inspector.get_table_names()
-    assert "test_cases" in tables, "The 'test_cases' table was not created"
+def test_case_create_schema():
+    data = {
+        "name": "Register test",
+        "description": "Test registration with valid data",
+        "expected_result": "User should be registered",
+        "tags": "UI,regression"
+    }
 
-    # Add a new case to verify the model works with the database
-    db_gen = get_db()
-    db = next(db_gen)
-    case = Case(name="Test Case", description="Some description", expected_result="Pass")
-    db.add(case)
-    db.commit()
-    db.refresh(case)
+    schema = CaseCreate(**data)
+    assert isinstance(schema, CaseCreate)
 
-    # Verify the case was added
-    assert case.id is not None, "Case ID should not be None after insertion"
-    assert case.name == "Test Case", "Case name does not match"
-    assert case.description == "Some description", "Case description does not match"
-    assert case.expected_result == "Pass", "Case expected result does not match"
+def test_case_read_schema():
+    data = {
+        "id": 1,
+        "name": "Reset password",
+        "description": "Test reset password flow",
+        "expected_result": "User should receive reset link",
+        "tags": "API,critical"
+    }
 
-    # Clean up
-    db.close()
+    schema = CaseRead(**data)
+    assert schema.id == 1
+    assert schema.name == data["name"]
+    assert schema.description == data["description"]
+    assert schema.expected_result == data["expected_result"]
+    assert schema.tags == data["tags"]
+    

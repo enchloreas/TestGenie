@@ -18,3 +18,4 @@ class Case(Base):
     name = Column(String, index=True)
     description = Column(String, index=True)
     expected_result = Column(String, index=True)
+    tags = Column(String, index=True)  # Tags field as comma-separated string
