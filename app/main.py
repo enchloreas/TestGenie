@@ -4,6 +4,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app import models, schemas, crud
 from app.database import engine, get_db
+from app.jira_service import get_user_stories
 
 # Create all database tables
 models.Base.metadata.create_all(bind=engine)
@@ -43,6 +44,20 @@ def delete_case(case_id: int, db: Session = Depends(get_db)):
     if db_case is None:
         raise HTTPException(status_code=404, detail="Case not found")
     return db_case
+
+### JIRA INTEGRATION ENDPOINTS ###
+# JIRA stories endpoint
+@app.get("/jira/stories/")
+def get_jira_stories():
+    print("Endpoint /jira/stories/ called") 
+    try:
+        stories = get_user_stories()
+        return stories
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch stories: {str(e)}")
+
+
+
 # Note: The above code assumes that the database session is managed by FastAPI's dependency injection system.
 # The `db` parameter in the functions is expected to be a SQLAlchemy session object.
 # This code provides a RESTful API for managing test cases using FastAPI.
