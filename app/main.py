@@ -1,10 +1,12 @@
 # app/main.py
 
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Query
+from typing import List, Dict
 from sqlalchemy.orm import Session
 from app import models, schemas, crud
 from app.database import engine, get_db
-from app.jira_service import get_user_stories
+#from app.jira_service import get_user_stories
+from app import jira_service
 
 # Create all database tables
 models.Base.metadata.create_all(bind=engine)
@@ -48,10 +50,13 @@ def delete_case(case_id: int, db: Session = Depends(get_db)):
 ### JIRA INTEGRATION ENDPOINTS ###
 # JIRA stories endpoint
 @app.get("/jira/stories/")
-def get_jira_stories():
+def get_jira_stories(
+    project_key: str = Query(..., description="Jira project key, e.g. 'TG'"),
+    issue_type: str = Query(..., description="Jira issue type, e.g. 'Story'")
+) -> List[Dict]:
     print("Endpoint /jira/stories/ called") 
     try:
-        stories = get_user_stories()
+        stories = jira_service.get_user_stories(project_key, issue_type)
         return stories
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch stories: {str(e)}")

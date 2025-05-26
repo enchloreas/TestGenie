@@ -3,12 +3,12 @@
 import requests
 from requests.auth import HTTPBasicAuth
 from typing import List, Dict
-from app.config import JIRA_DOMAIN, JIRA_PROJECT_KEY, JIRA_EMAIL, JIRA_API_TOKEN
+from app.config import JIRA_DOMAIN, JIRA_EMAIL, JIRA_API_TOKEN
 
-def get_user_stories() -> List[Dict]:
+def get_user_stories(project_key: str, issue_type: str) -> List[Dict]:
     print("get_user_stories function called") 
     url = f"{JIRA_DOMAIN}/rest/api/3/search"
-    jql = f"project={JIRA_PROJECT_KEY} AND issuetype=Story"  # Adjust JQL as needed
+    jql = f"project={project_key} AND issuetype={issue_type}"  # Adjust JQL as needed
     headers = {"Accept": "application/json"}
     auth = HTTPBasicAuth(JIRA_EMAIL, JIRA_API_TOKEN)
     params = {
