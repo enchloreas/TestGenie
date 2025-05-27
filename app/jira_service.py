@@ -5,15 +5,15 @@ from requests.auth import HTTPBasicAuth
 from typing import List, Dict
 from app.config import JIRA_DOMAIN, JIRA_EMAIL, JIRA_API_TOKEN
 
-def get_user_stories(project_key: str, issue_type: str) -> List[Dict]:
-    print("get_user_stories function called") 
+def get_all_user_stories(project_key: str, issue_type: str) -> List[Dict]:
+    print("get_all_user_stories function called") 
     url = f"{JIRA_DOMAIN}/rest/api/3/search"
     jql = f"project={project_key} AND issuetype={issue_type}"  # Adjust JQL as needed
     headers = {"Accept": "application/json"}
     auth = HTTPBasicAuth(JIRA_EMAIL, JIRA_API_TOKEN)
     params = {
         "jql": jql,
-        "fields": "summary,description"
+        "fields": "summary,description,status"
     }
     # Debugging: Log the request details
     print(f"Request URL: {url}")
@@ -31,7 +31,8 @@ def get_user_stories(project_key: str, issue_type: str) -> List[Dict]:
             {
                 "key": issue["key"],
                 "summary": issue["fields"]["summary"],
-                "description": issue["fields"]["description"]
+                "description": issue["fields"]["description"],
+                "status": issue["fields"]["status"]["name"]
             }
             for issue in issues
         ]

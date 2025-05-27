@@ -5,7 +5,7 @@ from typing import List, Dict
 from sqlalchemy.orm import Session
 from app import models, schemas, crud
 from app.database import engine, get_db
-#from app.jira_service import get_user_stories
+#from app.jira_service import get_all_user_stories
 from app import jira_service
 
 # Create all database tables
@@ -56,7 +56,7 @@ def get_jira_stories(
 ) -> List[Dict]:
     print("Endpoint /jira/stories/ called") 
     try:
-        stories = jira_service.get_user_stories(project_key, issue_type)
+        stories = jira_service.get_all_user_stories(project_key, issue_type)
         return stories
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch stories: {str(e)}")
