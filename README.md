@@ -8,8 +8,12 @@ It provides seamless integration with Jira and GitHub Actions for CI/CD automati
 ![Build Status](https://github.com/enchloreas/TestGenie/actions/workflows/ci.yml/badge.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
+---
+
 ## Table of Contents
+
 - [Introduction](#testgenie)
+- [Project Roadmap](#project-roadmap)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
@@ -18,18 +22,61 @@ It provides seamless integration with Jira and GitHub Actions for CI/CD automati
 - [Contributing](#contributing)
 - [License](#license)
 
+---
+
+## Project Roadmap
+
+### 🚀 TestGenie Project Roadmap
+
+#### 📅 Phase 1 – Basic Functionality (Completed)
+- ✅ Initialize FastAPI project with Pydantic and SQLAlchemy.
+- ✅ Set up Alembic for database migrations.
+- ✅ Integrate with Jira API.
+- ✅ Implement CRUD endpoints for test case management.
+- ✅ Create user story (e.g., TG-1).
+- ✅ Configure AIO Tests for test case management.
+- ✅ Create manual test cases for TG-1 in AIO Tests.
+
+#### 📅 Phase 2 – Test Case Generation (In Progress)
+- 🔄 Develop logic for test case generation based on user story text.
+- 🔄 Implement integration with Jira to create test cases automatically.
+- 🔄 Build text processing modules (e.g., LLM-based or rule-based approaches).
+- 🔄 Test correctness and accuracy of generated test cases.
+
+#### 📅 Phase 3 – Functionality Expansion
+- 📌 Add endpoints for exporting test cases to various formats (CSV, PDF).
+- 📌 Implement user roles and access control.
+- 📌 Visualize user story coverage with diagrams or dashboards.
+
+#### 📅 Phase 4 – Deployment and Documentation
+- 📌 Set up CI/CD pipelines.
+- 📌 Deploy the application (e.g., Heroku, AWS).
+- 📌 Prepare comprehensive documentation, including data flow diagrams.
+
+#### 📅 Phase 5 – MVP Development for Demo
+- 📌 Integrate all functionality into a cohesive MVP.
+- 📌 Test and debug the application.
+- 📌 Prepare for the MVP demo presentation.
+
+---
+
 ## Features
 
-- Create, update, and list test cases
-- SQLite/PostgreSQL support
-- Ready for CI/CD and Docker deployment
+- Create, update, and list test cases.
+- SQLite/PostgreSQL support.
+- Ready for CI/CD and Docker deployment.
+- Seamless integration with Jira for user story management.
+
+---
 
 ## Tech Stack
 
-- FastAPI
-- SQLAlchemy
-- Pydantic
-- Pytest
+- **FastAPI**: Backend framework.
+- **SQLAlchemy**: ORM for database interactions.
+- **Pydantic**: Data validation and settings management.
+- **Pytest**: Unit testing framework.
+
+---
 
 ## Project Structure
 
