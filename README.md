@@ -1,6 +1,6 @@
 # TestGenie
 
-- ![TestGenie Logo](./assets/LogoTGsmall.png)
+![TestGenie Logo](./assets/LogoTGsmall.png)
 
 TestGenie is a FastAPI-based backend application designed to manage, store, and automate test cases. It uses SQLAlchemy for database interactions and Pydantic for request validation.
 
