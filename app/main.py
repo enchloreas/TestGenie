@@ -1,17 +1,20 @@
 # app/main.py
 
-from fastapi import FastAPI, Depends, HTTPException, Query
+from fastapi import FastAPI, Depends, HTTPException, Path, Query
 from typing import List, Dict
 from sqlalchemy.orm import Session
 from app import models, schemas, crud
 from app.database import engine, get_db
-#from app.jira_service import get_all_user_stories
-from app import jira_service
+from app.jira_service import JiraService
+from app.config import JIRA_DOMAIN, JIRA_EMAIL, JIRA_API_TOKEN
 
 # Create all database tables
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+# Initialize JiraService instance with configuration from config.py
+jira_service = JiraService(JIRA_DOMAIN, JIRA_EMAIL, JIRA_API_TOKEN)
 
 # Create a new test case
 @app.post("/cases/", response_model=schemas.CaseRead)
@@ -48,43 +51,30 @@ def delete_case(case_id: int, db: Session = Depends(get_db)):
     return db_case
 
 ### JIRA INTEGRATION ENDPOINTS ###
-# JIRA stories endpoint
+
+# Jira stories endpoint
 @app.get("/jira/stories/")
 def get_jira_stories(
     project_key: str = Query(..., description="Jira project key, e.g. 'TG'"),
     issue_type: str = Query(..., description="Jira issue type, e.g. 'Story'")
 ) -> List[Dict]:
-    print("Endpoint /jira/stories/ called") 
+    # Fetch all user stories from Jira for the specified project and issue type
+    print("Endpoint /jira/stories/ called")
     try:
         stories = jira_service.get_all_user_stories(project_key, issue_type)
         return stories
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch stories: {str(e)}")
 
-
-
-# Note: The above code assumes that the database session is managed by FastAPI's dependency injection system.
-# The `db` parameter in the functions is expected to be a SQLAlchemy session object.
-# This code provides a RESTful API for managing test cases using FastAPI.
-# The API includes endpoints for creating, reading, updating, and deleting test cases.
-# The `create_case` endpoint allows clients to create a new test case by sending a POST request with the test case data.
-# The `get_cases` endpoint retrieves all test cases from the database by sending a GET request.
-# The `get_case` endpoint retrieves a specific test case by its ID using a GET request.
-# The `update_case` endpoint allows clients to update an existing test case by sending a PUT request with the updated data.
-# The `delete_case` endpoint allows clients to delete a test case by sending a DELETE request with the test case ID.
-# The API uses Pydantic models for data validation and serialization.
-# The `schemas` module contains the Pydantic models for request and response data.
-# The `crud` module contains the database operations for managing test cases.
-# The `get_db` function is used to create a new database session and ensure that it is properly closed after use.
-# The API is built using FastAPI, which provides automatic generation of OpenAPI documentation and interactive API documentation.
-# The API endpoints are defined using FastAPI's route decorators, and the request and response models are specified using the `response_model` parameter.
-# The API also includes error handling for cases where a test case is not found in the database.
-# The `HTTPException` class is used to raise HTTP errors with appropriate status codes and error messages.
-# The API is designed to be easy to use and provides a clear and consistent interface for managing test cases.
-# The API can be easily extended to include additional functionality or endpoints as needed.
-# The API can be tested using tools like Postman or cURL, and it can be integrated with frontend applications or other services.
-# The API is designed to be scalable and can handle a large number of requests efficiently.
-# The API can be deployed to various environments, including cloud platforms or on-premises servers.
-# The API is built using modern web standards and best practices, ensuring compatibility with a wide range of clients and platforms.
-# The API is designed to be secure and includes measures to protect against common web vulnerabilities.
-
+# Jira single story endpoint by issue key
+@app.get("/jira/story/{issue_key}")
+def get_jira_story_by_key(
+    issue_key: str = Path(..., description="Jira issue key, e.g. 'TG-1'")
+) -> Dict:
+    # Fetch a single user story from Jira by its issue key
+    print(f"Endpoint /jira/story/{issue_key} called")
+    try:
+        story = jira_service.get_user_story_by_key(issue_key)
+        return story
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch story: {str(e)}")
