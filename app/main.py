@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app import models, schemas, crud
 from app.database import engine, get_db
 from app.jira_service import JiraService
-from app.config import JIRA_DOMAIN, JIRA_EMAIL, JIRA_API_TOKEN
+from app.config import settings
 
 # Create all database tables
 models.Base.metadata.create_all(bind=engine)
@@ -14,7 +14,7 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 # Initialize JiraService instance with configuration from config.py
-jira_service = JiraService(JIRA_DOMAIN, JIRA_EMAIL, JIRA_API_TOKEN)
+jira_service = JiraService(settings.JIRA_DOMAIN, settings.JIRA_EMAIL, settings.JIRA_API_TOKEN)
 
 # Create a new test case
 @app.post("/cases/", response_model=schemas.CaseRead)
