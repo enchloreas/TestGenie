@@ -3,11 +3,12 @@
 import pytest
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
-from app.config import TEST_DB_URL
+#from app.config import TEST_DB_URL
+from app.config import settings
 from app.database import Base
 
 # Create a test engine using the test database URL
-test_engine = create_engine(TEST_DB_URL, connect_args={"check_same_thread": False})
+test_engine = create_engine(settings.TEST_DB_URL, connect_args={"check_same_thread": False})
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
 
 @pytest.fixture(scope="module")
