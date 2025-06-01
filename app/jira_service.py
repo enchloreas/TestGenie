@@ -60,7 +60,7 @@ class JiraService:
         """
         Retrieve issue details by key.
         :param issue_key: Jira issue key, e.g. 'TG-1'
-        :return: Dictionary containing issue data
+        :return: Dictionary containing full issue data (as returned by Jira)
         """
         print(f"get_user_story_by_key method called with {issue_key}")
         url = f"{self.domain}/rest/api/3/issue/{issue_key}"
@@ -76,14 +76,7 @@ class JiraService:
         print(f"Response body: {response.text}")
 
         if response.status_code == 200:
-            issue = response.json()
-            return {
-                "key": issue["key"],
-                "summary": issue["fields"]["summary"],
-                "description": issue["fields"]["description"],
-                "status": issue["fields"]["status"]["name"]
-            }
+            return response.json()  # Return the full issue object
         else:
             print(f"Error: {response.status_code} - {response.text}")
             return {}
-   

@@ -87,7 +87,8 @@ TestGenie/
 │   ├── __init__.py      # Initialize app
 │   ├── config.py        #
 │   ├── crud.py          # CRUD operations
-│   ├── database.py      #
+│   ├── database.py      # 
+│   ├── jira_service.py  #
 │   ├── main.py          # FastAPI app initialization  
 │   ├── models.py        # Database models (SQLAlchemy)
 │   ├── schemas.py       # Pydantic models for request validation

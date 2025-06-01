@@ -1,7 +1,10 @@
 # app/schemas.py
 
 from pydantic import BaseModel, ConfigDict
-from typing import Optional
+from typing import Optional, List, Dict
+# ---------------------------
+# Base models for FastAPI
+# ---------------------------
 
 # Base schema for a test case
 class CaseBase(BaseModel):
@@ -19,3 +22,50 @@ class CaseRead(CaseBase):
     id: int
 
     model_config = ConfigDict(from_attributes=True)  # Updated to use ConfigDict
+
+# ---------------------------
+# 🤖 Models for OpenRouter (LLM) integration
+# ---------------------------
+
+class AIRequest(BaseModel):
+    requirements: str  # Functional description or requirements for generating test cases
+    num_cases: Optional[int] = 3  # Number of test cases to generate
+
+class AITestCase(BaseModel):
+    summary: str
+    description: str
+    steps: List[str]
+    expected_result: str
+    tags: Optional[List[str]] = None
+
+class AIResponse(BaseModel):
+    test_cases: List[AITestCase]
+
+
+# ---------------------------
+# Models for creating AIO Test via Jira API
+# ---------------------------
+
+# --- Test Case ---
+class JiraTestCaseCreate(BaseModel):
+    user_story_key: str  # Jira user story key where the test case will be added
+    title: str  # Title of the test case in AIO
+    description: str  # Detailed description of the test case
+    issue_type: str = "Test"  # Jira issue type for the test case (AIO uses Test)
+    expected_result: Optional[str] = None  # Expected result of the test case
+    steps: Optional[List[str]] = None  # Steps of the test case
+    pre_condition: Optional[str] = None  # Pre-condition for the test case
+    tags: Optional[List[str]] = None  # Tags or labels for the test case
+
+# --- Test Set ---
+class JiraTestSetCreate(BaseModel):
+    name: str  # Name of the test set
+    description: Optional[str] = None  # Description of the test set
+    test_case_keys: List[str]  # List of test case issue keys to include in set
+
+# --- Test Cycle ---
+class JiraTestCycleCreate(BaseModel):
+    name: str  # Name of the test cycle
+    description: Optional[str] = None  # Description of the test cycle
+    test_set_keys: List[str]  # List of test set issue keys to include in cycle
+

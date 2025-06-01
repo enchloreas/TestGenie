@@ -1,12 +1,15 @@
 # app/main.py
 
-from fastapi import FastAPI, Depends, HTTPException, Path, Query
+from fastapi import FastAPI, Depends, HTTPException, Path, Query, Body
 from typing import List, Dict
 from sqlalchemy.orm import Session
 from app import models, schemas, crud
 from app.database import engine, get_db
 from app.jira_service import JiraService
+from app.ai_service import AIService
 from app.config import settings
+from app.schemas import JiraTestCaseCreate
+
 
 # Create all database tables
 models.Base.metadata.create_all(bind=engine)
@@ -15,6 +18,14 @@ app = FastAPI()
 
 # Initialize JiraService instance with configuration from config.py
 jira_service = JiraService(settings.JIRA_DOMAIN, settings.JIRA_EMAIL, settings.JIRA_API_TOKEN)
+# Initialize the AIService
+ai_service = AIService(
+    jira_domain=settings.JIRA_DOMAIN,
+    jira_email=settings.JIRA_EMAIL,
+    jira_api_token=settings.JIRA_API_TOKEN,
+    openrouter_url=settings.OPENROUTER_URL,
+    openrouter_api_key=settings.OPENROUTER_API_KEY
+)
 
 # Create a new test case
 @app.post("/cases/", response_model=schemas.CaseRead)
@@ -78,3 +89,19 @@ def get_jira_story_by_key(
         return story
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch story: {str(e)}")
+
+# Endpoint to generate test cases with AI for a Jira story
+@app.post("/jira/story/{issue_key}/generate-test-cases")
+#@app.get("/generate-test-cases")
+async def generate_test_cases(
+    issue_key: str = Path(..., description="Jira issue key, e.g., TG-1"),
+    model: str = Query("gpt-4", description="OpenRouter model to use. Available options: " + ", ".join(settings.AVAILABLE_MODELS)),
+    temperature: float = Query(0.7, description="Temperature setting for OpenRouter"),
+    max_tokens: int = Query(666, description="Maximum token limit for OpenRouter")
+):
+    """
+    Generate structured test cases for a Jira story using OpenRouter AI.
+    """
+    # Call AIService to process the Jira story and send the prompt to OpenRouter
+    response = ai_service.process_jira_story_and_send_to_openrouter(issue_key, model, temperature, max_tokens)
+    return response
