@@ -39,7 +39,8 @@ It provides seamless integration with Jira and GitHub Actions for CI/CD automati
 - ✅ Create manual test cases for TG-1 in AIO Tests.
 
 #### 📅 Phase 2 – Test Case Generation (In Progress)
-- 🔄 Develop logic for test case generation based on user story text.
+- ✅ Develop logic for test case generation based on user story text.
+- 🔄 Implement saving generated test cases to database.
 - 🔄 Implement integration with Jira to create test cases automatically.
 - 🔄 Build text processing modules (e.g., LLM-based or rule-based approaches).
 - 🔄 Test correctness and accuracy of generated test cases.
