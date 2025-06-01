@@ -2,11 +2,10 @@
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base 
-from .config import DATABASE_URL  # Import the database URL from config
-
+from .config import settings
 # Create engine for SQLite DB
 engine = create_engine(
-    DATABASE_URL, connect_args={"check_same_thread": False}
+    settings.DATABASE_URL, connect_args={"check_same_thread": False}
 )
 
 # Session factory for the database
