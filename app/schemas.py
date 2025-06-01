@@ -31,6 +31,12 @@ class AIRequest(BaseModel):
     requirements: str  # Functional description or requirements for generating test cases
     num_cases: Optional[int] = 3  # Number of test cases to generate
 
+class AIREquestWithStory(AIRequest):
+    story_key: str  # Jira story key, e.g. 'TG-1'
+    story_summary: str  # Summary of the Jira story
+    story_description: str  # Flattened description of the Jira story in ADF format
+    tags: Optional[List[str]] = None  # Tags or labels for the test cases
+    model_config = ConfigDict(from_attributes=True)
 class AITestCase(BaseModel):
     summary: str
     description: str
