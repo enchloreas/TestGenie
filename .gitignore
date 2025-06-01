@@ -5,7 +5,7 @@ tests/logs/
 tests/jira/
 *.log
 *.pyc
-
+.env
 *.sqlite3
 .idea/
 .vscode/
