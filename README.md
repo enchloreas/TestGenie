@@ -132,7 +132,7 @@ TestGenie/
 
 4. Set up the database:
    ```bash
-   alembic upgrade head
+   The database tables will be created automatically when you first run the application. No manual migration or Alembic command is required.
    ```
 
 5. Run the application:
