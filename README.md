@@ -10,7 +10,8 @@ It provides seamless integration with Jira and GitHub Actions for CI/CD automati
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 ---
-
+# ![Response](./assets/AI_Response.png)
+# ![Database](./assets/DataBase.png)
 ## Table of Contents
 
 - [Introduction](#testgenie)
@@ -40,7 +41,7 @@ It provides seamless integration with Jira and GitHub Actions for CI/CD automati
 
 #### 📅 Phase 2 – Test Case Generation (In Progress)
 - ✅ Develop logic for test case generation based on user story text.
-- 🔄 Implement saving generated test cases to database.
+- ✅ Implement saving generated test cases to database.
 - 🔄 Implement integration with Jira to create test cases automatically.
 - 🔄 Build text processing modules (e.g., LLM-based or rule-based approaches).
 - 🔄 Test correctness and accuracy of generated test cases.

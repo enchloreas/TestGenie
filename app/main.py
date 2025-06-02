@@ -9,6 +9,7 @@ from app.jira_service import JiraService
 from app.ai_service import AIService
 from app.config import settings
 from app.schemas import JiraTestCaseCreate
+import logging
 
 
 # Create all database tables
@@ -92,16 +93,61 @@ def get_jira_story_by_key(
 
 # Endpoint to generate test cases with AI for a Jira story
 @app.post("/jira/story/{issue_key}/generate-test-cases")
-#@app.get("/generate-test-cases")
 async def generate_test_cases(
     issue_key: str = Path(..., description="Jira issue key, e.g., TG-1"),
-    model: str = Query("gpt-4", description="OpenRouter model to use. Available options: " + ", ".join(settings.AVAILABLE_MODELS)),
+    model: str = Query("meta-llama/llama-3-8b-instruct", description="OpenRouter model to use. Available options: " + ", ".join(settings.AVAILABLE_MODELS)),
     temperature: float = Query(0.7, description="Temperature setting for OpenRouter"),
-    max_tokens: int = Query(666, description="Maximum token limit for OpenRouter")
+    max_tokens: int = Query(666, description="Maximum token limit for OpenRouter"),
+    db: Session = Depends(get_db)
 ):
     """
     Generate structured test cases for a Jira story using OpenRouter AI.
     """
-    # Call AIService to process the Jira story and send the prompt to OpenRouter
-    response = ai_service.process_jira_story_and_send_to_openrouter(issue_key, model, temperature, max_tokens)
-    return response
+    try:
+        # Use the new method from AIService that handles normalization
+        test_cases = ai_service.generate_and_normalize_test_cases(
+            issue_key=issue_key,
+            model=model,
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+
+        if not test_cases:
+            raise HTTPException(status_code=500, detail="No valid test cases could be generated")
+
+        # Save each test case to the database
+        saved_cases = []
+        for tc in test_cases:
+            try:
+                # Create test case data using normalized structure
+                test_case_data = schemas.GeneratedTestCaseCreate(
+                    story_key=issue_key,
+                    title=tc["title"],
+                    preconditions=tc["preconditions"],
+                    steps=tc["steps"],
+                    expected_results=tc["expected_results"],
+                    postconditions=tc["postconditions"]
+                )
+
+                # Save to database
+                saved_case = crud.create_generated_test_case(db=db, test_case=test_case_data)
+                saved_cases.append(saved_case)
+
+            except Exception as e:
+                logging.error(f"Failed to save test case: {tc}. Error: {e}")
+                continue
+
+        # Return the results
+        return {
+            "message": f"Successfully generated and saved {len(saved_cases)} test cases",
+            "total_generated": len(test_cases),
+            "total_saved": len(saved_cases),
+            "saved_cases": [schemas.GeneratedTestCaseResponse.model_validate(c) for c in saved_cases]
+        }
+
+    except HTTPException:
+        # Re-raise HTTP exceptions
+        raise
+    except Exception as e:
+        logging.error(f"Unexpected error in generate_test_cases: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")

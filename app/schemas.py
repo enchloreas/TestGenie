@@ -2,6 +2,7 @@
 
 from pydantic import BaseModel, ConfigDict
 from typing import Optional, List, Dict
+
 # ---------------------------
 # Base models for FastAPI
 # ---------------------------
@@ -22,31 +23,25 @@ class CaseRead(CaseBase):
     id: int
 
     model_config = ConfigDict(from_attributes=True)  # Updated to use ConfigDict
+    
+# ----------------------------------------
+# Models for OpenRouter (LLM) integration
+# ----------------------------------------
+class GeneratedTestCaseBase(BaseModel):
+    story_key: str
+    title: str
+    preconditions: Optional[str] = None
+    steps: str
+    expected_results: str
+    postconditions: Optional[str] = None
 
-# ---------------------------
-# 🤖 Models for OpenRouter (LLM) integration
-# ---------------------------
+class GeneratedTestCaseCreate(GeneratedTestCaseBase):
+    pass  # Inherits all fields from base for creation
 
-class AIRequest(BaseModel):
-    requirements: str  # Functional description or requirements for generating test cases
-    num_cases: Optional[int] = 3  # Number of test cases to generate
+class GeneratedTestCaseResponse(GeneratedTestCaseBase):
+    id: int
 
-class AIREquestWithStory(AIRequest):
-    story_key: str  # Jira story key, e.g. 'TG-1'
-    story_summary: str  # Summary of the Jira story
-    story_description: str  # Flattened description of the Jira story in ADF format
-    tags: Optional[List[str]] = None  # Tags or labels for the test cases
-    model_config = ConfigDict(from_attributes=True)
-class AITestCase(BaseModel):
-    summary: str
-    description: str
-    steps: List[str]
-    expected_result: str
-    tags: Optional[List[str]] = None
-
-class AIResponse(BaseModel):
-    test_cases: List[AITestCase]
-
+    model_config = ConfigDict(from_attributes=True)  # Updated to use ConfigDict
 
 # ---------------------------
 # Models for creating AIO Test via Jira API

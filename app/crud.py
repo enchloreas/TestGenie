@@ -36,6 +36,27 @@ def delete_case(db: Session, case_id: int):
         db.delete(db_case)
         db.commit()
     return db_case
+
+# ----------------------------------------
+# Models for OpenRouter (LLM) integration
+# ----------------------------------------
+def create_generated_test_case(db: Session, test_case: schemas.GeneratedTestCaseCreate):
+    # Create a new GeneratedTestCase object and add it to the database
+    db_test_case = models.GeneratedTestCase(**test_case.dict())
+    db.add(db_test_case)
+    db.commit()
+    db.refresh(db_test_case)
+    return db_test_case
+
+def get_generated_test_case(db: Session, test_case_id: int):
+    # Retrieve a GeneratedTestCase by its ID
+    return db.query(models.GeneratedTestCase).filter(models.GeneratedTestCase.id == test_case_id).first()
+
+def get_generated_test_cases(db: Session, skip: int = 0, limit: int = 10):
+    # Retrieve a list of GeneratedTestCase objects with pagination
+    return db.query(models.GeneratedTestCase).offset(skip).limit(limit).all()
+
+
 # Note: The above code assumes that the database session is managed by FastAPI's dependency injection system.
 # The `db` parameter in the functions is expected to be a SQLAlchemy session object.
 # This code provides basic CRUD operations for managing test cases in a database.

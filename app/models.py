@@ -19,3 +19,15 @@ class Case(Base):
     description = Column(String, index=True)
     expected_result = Column(String, index=True)
     tags = Column(String, index=True)  # Tags field as comma-separated string
+
+# Represents a generated test case entity stored in the database.
+class GeneratedTestCase(Base):
+    __tablename__ = "generated_test_cases"
+
+    id = Column(Integer, primary_key=True, index=True)
+    story_key = Column(String(50), index=True)  # Key or identifier for the user story
+    title = Column(String(255), index=True)     # Title of the generated test case
+    preconditions = Column(String)              # Preconditions for the test case
+    steps = Column(String)                      # Steps to execute the test case
+    expected_results = Column(String)           # Expected results after execution
+    postconditions = Column(String)             # Postconditions after the test case
