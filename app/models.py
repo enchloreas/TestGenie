@@ -31,3 +31,4 @@ class GeneratedTestCase(Base):
     steps = Column(String)                      # Steps to execute the test case
     expected_results = Column(String)           # Expected results after execution
     postconditions = Column(String)             # Postconditions after the test case
+    tags = Column(String)                       # Tags for categorization, e.g., "TG-1-TC-1"

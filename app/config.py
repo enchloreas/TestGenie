@@ -2,8 +2,9 @@
 
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
+import os
 
-load_dotenv()  # Load variables from .env file
+load_dotenv(dotenv_path=".env", override=True)  # Load variables from .env file
 
 class Settings(BaseSettings):
 
@@ -34,3 +35,7 @@ class Settings(BaseSettings):
 
 # Instantiate the settings object
 settings = Settings()
+
+print("Loaded JIRA_DOMAIN from env:", settings.JIRA_DOMAIN)
+print("Loaded AIO_API_URL from env:", settings.AIO_API_URL)
+print("Loaded OPENROUTER_URL from env:", settings.OPENROUTER_URL)

@@ -34,6 +34,7 @@ class GeneratedTestCaseBase(BaseModel):
     steps: str
     expected_results: str
     postconditions: Optional[str] = None
+    tags: Optional[str] = None  # Comma-separated tags (e.g., "TG-1-TC-1")
 
 class GeneratedTestCaseCreate(GeneratedTestCaseBase):
     pass  # Inherits all fields from base for creation

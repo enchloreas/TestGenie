@@ -7,6 +7,7 @@ from app import models, schemas, crud
 from app.database import engine, get_db
 from app.jira_service import JiraService
 from app.ai_service import AIService
+from app.pm_service import PMService
 from app.config import settings
 from app.schemas import JiraTestCaseCreate
 import logging
@@ -19,6 +20,7 @@ app = FastAPI()
 
 # Initialize JiraService instance with configuration from config.py
 jira_service = JiraService(settings.JIRA_DOMAIN, settings.JIRA_EMAIL, settings.JIRA_API_TOKEN)
+
 # Initialize the AIService
 ai_service = AIService(
     jira_domain=settings.JIRA_DOMAIN,
@@ -26,6 +28,16 @@ ai_service = AIService(
     jira_api_token=settings.JIRA_API_TOKEN,
     openrouter_url=settings.OPENROUTER_URL,
     openrouter_api_key=settings.OPENROUTER_API_KEY
+)
+# Initialize the PMService
+pm_service = PMService(
+    jira_domain=settings.JIRA_DOMAIN,
+    jira_email=settings.JIRA_EMAIL,
+    jira_api_token=settings.JIRA_API_TOKEN,
+    openrouter_url=settings.OPENROUTER_URL,
+    openrouter_api_key=settings.OPENROUTER_API_KEY,
+    aio_api_url=settings.AIO_API_URL,           # <-- add this
+    aio_api_token=settings.AIO_API_TOKEN        # <-- add this
 )
 
 # Create a new test case
@@ -115,34 +127,53 @@ async def generate_test_cases(
         if not test_cases:
             raise HTTPException(status_code=500, detail="No valid test cases could be generated")
 
-        # Save each test case to the database
-        saved_cases = []
-        for tc in test_cases:
-            try:
-                # Create test case data using normalized structure
-                test_case_data = schemas.GeneratedTestCaseCreate(
-                    story_key=issue_key,
-                    title=tc["title"],
-                    preconditions=tc["preconditions"],
-                    steps=tc["steps"],
-                    expected_results=tc["expected_results"],
-                    postconditions=tc["postconditions"]
-                )
+        # Return the results
+        return {
+            "message": f"Successfully generated and saved {len(test_cases)} test cases",
+            "total_generated": len(test_cases),
+            "test_cases": test_cases
+        }
 
-                # Save to database
-                saved_case = crud.create_generated_test_case(db=db, test_case=test_case_data)
-                saved_cases.append(saved_case)
+    except HTTPException:
+        # Re-raise HTTP exceptions
+        raise
+    except Exception as e:
+        logging.error(f"Unexpected error in generate_test_cases: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
-            except Exception as e:
-                logging.error(f"Failed to save test case: {tc}. Error: {e}")
-                continue
+# Endpoint to create in Jira generated test cases with AI for a Jira story    
+@app.post("/jira/project/{project_key}/story/{issue_key}/create-generated-test-cases")
+async def generate_test_cases(
+    project_key: str = Path(..., description="Jira project key, e.g. 'TG'"),   
+    issue_key: str = Path(..., description="Jira issue key, e.g., TG-1"),
+    model: str = Query("meta-llama/llama-3-8b-instruct", description="OpenRouter model to use. Available options: " + ", ".join(settings.AVAILABLE_MODELS)),
+    temperature: float = Query(0.7, description="Temperature setting for OpenRouter"),
+    max_tokens: int = Query(666, description="Maximum token limit for OpenRouter"),
+    db: Session = Depends(get_db)
+):
+    """
+    Generate structured test cases for a Jira story using OpenRouter AI.
+    """
+    try:
+        # Use the new method from AIService that handles normalization
+        test_cases = pm_service.add_generated_test_cases_to_jira(
+            project_key, 
+            issue_key, 
+            model,
+            temperature,
+            max_tokens
+            )
+
+        if not test_cases:
+            raise HTTPException(status_code=500, detail="No valid test cases could be generated")
+
+       
 
         # Return the results
         return {
-            "message": f"Successfully generated and saved {len(saved_cases)} test cases",
+            "message": f"Successfully generated and saved {len(test_cases)} test cases",
             "total_generated": len(test_cases),
-            "total_saved": len(saved_cases),
-            "saved_cases": [schemas.GeneratedTestCaseResponse.model_validate(c) for c in saved_cases]
+            "test_cases": test_cases
         }
 
     except HTTPException:
