@@ -143,7 +143,7 @@ async def generate_test_cases(
 
 # Endpoint to create in Jira generated test cases with AI for a Jira story    
 @app.post("/jira/project/{project_key}/story/{issue_key}/create-generated-test-cases")
-async def generate_test_cases(
+async def create_generate_test_cases(
     project_key: str = Path(..., description="Jira project key, e.g. 'TG'"),   
     issue_key: str = Path(..., description="Jira issue key, e.g., TG-1"),
     model: str = Query("meta-llama/llama-3-8b-instruct", description="OpenRouter model to use. Available options: " + ", ".join(settings.AVAILABLE_MODELS)),
