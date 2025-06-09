@@ -10,6 +10,14 @@ class Settings(BaseSettings):
 
     # Available AI models
     AVAILABLE_MODELS: list[str]
+
+    # TestGenie configuration
+    TESTGENIE_VERSION: str = "1.0.0"  # Default version, can be overridden
+    TESTGENIE_NAME: str = "TestGenie"  # Default name, can be overridden
+    TESTGENIE_DESCRIPTION: str = "AI-powered test case generation tool"  # Default description, can be overridden
+    TESTGENIE_AUTHOR: str = "YenEnchloreas"  # Default author, can be overridden
+    TESTGENIE_LICENSE: str = "MIT"  # Default license, can be overridden
+    TESTGENIE_API_URL: str = "http://localhost:8000"  # Default URL, can be overridden
     
     # Database configuration
     DATABASE_URL: str = "sqlite:///./testgenie.db"  # Production DB

@@ -116,33 +116,37 @@ TestGenie/
 ## Installation
 
 1. Clone the repository:
-   ```bash
+   ```
    git clone https://github.com/enchloreas/TestGenie.git
    cd TestGenie
    ```
 
 2. Create and activate a virtual environment:
-   ```bash
+   ```
    python -m venv venv
    .\venv\Scripts\Activate.ps1  # On Windows
    ```
 
 3. Install dependencies:
-   ```bash
+   ```
    pip install -r requirements.txt
    ```
 
 4. Set up the database:
-   ```bash
+   ```
    The database tables will be created automatically when you first run the application. No manual migration or Alembic command is required.
    ```
 
-5. Run the application:
-   ```bash
+5. Run the API:
+   ```
    uvicorn app.main:app --reload
    ```
-
 6. Access the API documentation at `http://127.0.0.1:8000/docs`.
+
+7. Run Web :
+   ```
+   python -m app.ui_testgenie
+   ```
 
 ## Usage
 
