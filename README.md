@@ -145,7 +145,7 @@ TestGenie/
 
 7. Run Web :
    ```
-   python -m app.ui_testgenie
+   python -m app.app
    ```
 
 ## Usage

@@ -111,6 +111,7 @@ class PMService:
             "Content-Type": "application/json"
         }
 
+        response = None
         try:
             response = requests.post(aio_url, json=test_case, headers=headers)
             if response.status_code == 200:
@@ -119,8 +120,14 @@ class PMService:
                 logging.error(f"AIO: Test case failed {test_case['title']} | Status: {response.status_code} | Response: {response.text}")
         except Exception as e:
             logging.error(f"AIO: ConnectionError {test_case['title']}: {e}")
+            return {"error": str(e)}
         
-        return "Test case created successfully" if response.status_code == 200 else {"error": response.text}
+        if response and response.status_code == 200:
+            return "Test case created successfully"
+        elif response:
+            return {"error": response.text}
+        else:
+            return {"error": "No response from AIO API"}
             
     def add_generated_test_cases_to_jira(
             self, 
@@ -151,7 +158,7 @@ class PMService:
             return test_cases
         except Exception as e:
             logging.error(f"Failed to add test cases to Jira: {e}")
-            return f"Added {len(test_cases)} test cases to Jira story {issue_key}."
+            return []
             
                 
 if __name__ == "__main__":
