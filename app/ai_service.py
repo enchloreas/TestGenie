@@ -14,11 +14,11 @@ logging.basicConfig(level=logging.INFO)
 class AIService:
     def __init__(
         self,
-        jira_domain: str = None,
-        jira_email: str = None,
-        jira_api_token: str = None,
-        openrouter_url: str = None,
-        openrouter_api_key: str = None,
+        jira_domain: str,
+        jira_email: str,
+        jira_api_token: str,
+        openrouter_url: str,
+        openrouter_api_key: str,
     ):
         """
         Initialize AIService with configuration from settings.

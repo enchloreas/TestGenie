@@ -1,4 +1,4 @@
-# app/app.py
+# app.py
 from app.config import settings
 import gradio as gr
 from app.ai_service import AIService
